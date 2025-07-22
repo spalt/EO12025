@@ -176,9 +176,9 @@ public class MainActivity extends AppCompatActivity {
 
    void loadsettings() {
        SharedPreferences settings = getSharedPreferences("prefs", MODE_PRIVATE);
-       serviceAccountEmail = settings.getString("SERVICE_ACCOUNT_EMAIL", "");
-       serviceAccountPrivateKey = settings.getString("SERVICE_ACCOUNT_PRIVATE_KEY", "");
-       folderId = settings.getString("FOLDER_ID", "");
+       serviceAccountEmail = settings.getString("serviceAccountEmail", "");
+       serviceAccountPrivateKey = settings.getString("serviceAccountPrivateKey", "");
+       folderId = settings.getString("folderId", "");
 
        displayOption = settings.getInt("displayOption", 0);
        startQuietHour = settings.getInt("startQuietHour", -1);
@@ -632,6 +632,7 @@ public class MainActivity extends AppCompatActivity {
                        List<String> files = null;
                        try {
                            files = driveHelper.listFiles(folderId);
+                           Collections.shuffle(files, new Random());
                        } catch (Exception e) {
                            throw new RuntimeException(e);
                        }
@@ -914,7 +915,6 @@ class GoogleDriveHelper {
             for (int i = 0; i < filesArray.length(); i++) {
                 JSONObject fileObject = filesArray.getJSONObject(i);
                 files.add(fileObject.getString("id") + "|" + fileObject.getString("name"));
-
             }
             return files;
         }
