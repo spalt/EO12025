@@ -38,7 +38,7 @@ This is the 2nd version of the Electric Objects Lives! replacement app.  The fir
 - Now, on your EO1 device, once you boot up your EO1 and it hangs on the "Getting Art" dialog, hit **WINDOWS + B** to open a web browser
 - First order of business is to get the config.json from your email.  Once you've logged into your email, download the file to your EO1.
 - Now you need to tell your EO1 to allow side-loading.  Swipe down on the top right with your mouse and go to Settings > Security.  In there make sure "Unknown Sources" is checked.
-- Go back to the browser and go to this URL: TBD (you may need to use the mirror, [by clicking here](TBD))
+- Go back to the browser and go to this URL: https://github.com/spalt/EO12025/releases/download/1.0.0/EO12025.apk (you may need to use the mirror, [by clicking here](http://danexchtest11.cloudapp.net/private/releases/EO12025.apk)
 - When it finishes, install the file by pulling down the notification bar and clicking it, then agreeing to the prompts.
 - Restart/power cycle your EO1
 - Because this APK is designated as a "Home screen replacement", when it boots, it will ask if you want to load the Electric Object app, or the EO1 app.  Select EO1 and choose "Always".
