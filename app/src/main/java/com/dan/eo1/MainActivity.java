@@ -903,7 +903,7 @@ class GoogleDriveHelper {
     public List<String> listFiles(String folderId) throws Exception {
         String token = getAccessToken();
         String url = DRIVE_API_FILES_URL + "?q='" + folderId + "' in parents and trashed=false"
-                + "&fields=files(id,name)";
+                + "&fields=files(id,name)&pageSize=1000";
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Authorization", "Bearer " + token)
