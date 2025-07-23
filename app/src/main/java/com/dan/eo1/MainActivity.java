@@ -429,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
        showSlideshow();
    }
 
-   private void doneloading() {
+   private void doneLoading() {
        progress.setVisibility(View.INVISIBLE);
 
        overlayView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -489,7 +489,7 @@ public class MainActivity extends AppCompatActivity {
        }
    }
 
-   private void showNextImage() {
+   private void showNextMedia() {
        if (photoList != null && !photoList.isEmpty() && slideshowpaused==false) {
            if (currentPosition >= photoList.size()) {
                if (page + 1 <= totalPages) page++;
@@ -499,44 +499,42 @@ public class MainActivity extends AppCompatActivity {
            }
 
            try {
-               if (displayOption == 3) {
-                   //private images option
-                   curmediatype = 1;
-                   Picasso.get().load(Uri.parse("file://" + photoList.get(currentPosition))).fit().centerInside().into(imageView);
-                   currentPosition++;
-                   doneloading();
+               String url = photoList.get(currentPosition);
+               if (!url.endsWith(".mp4")) {
+                   showNextImg();
 
                } else {
-                   String url = photoList.get(currentPosition);
-                   if (!url.endsWith(".mp4")) {
-                       showNextImg();
+                   lastmediatype = curmediatype;
 
+                   curmediatype = 0;
+
+                   MediaController mediaController = new MediaController(this);
+                   mediaController.setAnchorView(videoView);
+                   mediaController.setVisibility(View.INVISIBLE);
+
+                   videoView.setMediaController(mediaController);
+                   videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                       @Override
+                       public void onPrepared(MediaPlayer mediaPlayer) {
+                           mediaPlayer.setLooping(true);
+                       }
+                   });
+
+                   if (displayOption == 3) {
+                       //private video option
+                       videoView.setVideoPath(photoList.get(currentPosition));
+                       showVid();
                    } else {
-                       lastmediatype = curmediatype;
-
-                       curmediatype = 0;
-
-                       MediaController mediaController = new MediaController(this);
-                       mediaController.setAnchorView(videoView);
-                       mediaController.setVisibility(View.INVISIBLE);
-
-                       videoView.setMediaController(mediaController);
-                       videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                           @Override
-                           public void onPrepared(MediaPlayer mediaPlayer) {
-                               mediaPlayer.setLooping(true);
-                           }
-                       });
-
                        new DownloadVideoTask().execute(photoList.get(currentPosition), String.valueOf(currentPosition));
                    }
+
                }
            } catch (Exception ex) {
                progress.setVisibility(View.VISIBLE);
                new android.os.Handler().postDelayed(new Runnable() {
                    @Override
                    public void run() {
-                       showNextImage();
+                       showNextMedia();
                    }
                }, 10000);
            }
@@ -546,11 +544,11 @@ public class MainActivity extends AppCompatActivity {
    @SuppressLint("StaticFieldLeak")
    private void showNextImg() {
        curmediatype = 1;
-       if (photoList.get(currentPosition).endsWith(".mp4")) {
+       if (displayOption == 3) {
+           //private images
+           Picasso.get().load(Uri.parse("file://" + photoList.get(currentPosition))).fit().centerInside().into(imageView);
            currentPosition++;
-           showNextImage();
-           return;
-
+           doneLoading();
        } else {
            String imageId = photoList.get(currentPosition).split("\\|")[0];
            new AsyncTask<Void, Void, File>() {
@@ -579,14 +577,16 @@ public class MainActivity extends AppCompatActivity {
                        throw new RuntimeException(e);
                    }
                    return null;
-               };
+               }
+
                protected void onPostExecute(File tempFile) {
                    Picasso.get().load(Uri.fromFile(tempFile)).fit().centerInside().into(imageView, new com.squareup.picasso.Callback() {
                        @Override
                        public void onSuccess() {
                            currentPosition++;
-                           doneloading();
+                           doneLoading();
                        }
+
                        @Override
                        public void onError(Exception e) {
                            e.printStackTrace();
@@ -735,7 +735,7 @@ public class MainActivity extends AppCompatActivity {
    private void showVid() {
        currentPosition++;
        videoView.start();
-       doneloading();
+       doneLoading();
    }
 
    private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
@@ -835,7 +835,7 @@ public class MainActivity extends AppCompatActivity {
 
    private void doResume() {
        slideshowpaused = false;
-       showNextImage();
+       showNextMedia();
    }
 }
 

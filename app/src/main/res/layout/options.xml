@@ -63,14 +63,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:tag="0"
-            android:text="Show my photos" />
+            android:text="Show my media" />
 
         <RadioButton
             android:id="@+id/radioOption4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:tag="3"
-            android:text="Show my on device photos" />
+            android:text="Show my on device media" />
 
         <RadioButton
             android:id="@+id/radioOption5"
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:tag="4"
             android:enabled="false"
-            android:text="Show public photos and share my photos with others" />
+            android:text="Show public media and share mine with others" />
 
 
     </RadioGroup>
